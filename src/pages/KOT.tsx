@@ -23,6 +23,7 @@ const KOT = () => {
           const orderData = await getItem<Order>(STORES.ORDERS, parseInt(id));
           if (orderData) {
             setOrder(orderData);
+            console.log("Order loaded successfully:", orderData);
           } else {
             toast.error("Order not found");
             navigate("/orders");

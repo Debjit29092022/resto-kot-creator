@@ -26,7 +26,7 @@ export const KOTContent = ({ order, profile, printRef }: KOTContentProps) => {
 
   return (
     <Card className="max-w-md mx-auto bg-white text-black">
-      <div ref={printRef} className="p-6">
+      <div id="printRef" ref={printRef} className="p-6">
         <div className="text-center mb-4">
           <h1 className="text-xl font-bold">KITCHEN ORDER TICKET</h1>
           <div className="flex justify-between mt-2 text-sm">
