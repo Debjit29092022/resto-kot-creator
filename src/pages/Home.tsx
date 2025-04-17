@@ -5,7 +5,7 @@ import { getItem, STORES } from "@/lib/db";
 import { Profile } from "@/types";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Restaurant, UtensilsCrossed, Phone, Mail, MapPin, Users, KanbanSquare, 
+import { Utensils, UtensilsCrossed, Phone, Mail, MapPin, Users, KanbanSquare, 
   LineChart, Settings, ChefHat, CalendarClock } from "lucide-react";
 
 const Home = () => {
@@ -53,7 +53,7 @@ const Home = () => {
       {/* Hero Section */}
       <div className="bg-gradient-to-r from-primary/10 to-primary/30 rounded-lg p-8 mb-8 text-center">
         <div className="flex justify-center mb-4">
-          <Restaurant className="h-16 w-16 text-primary" />
+          <Utensils className="h-16 w-16 text-primary" />
         </div>
         <h1 className="text-4xl font-bold mb-2">
           {profile?.restaurantName || "Legendary Baos & Wings"}

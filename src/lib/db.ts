@@ -748,8 +748,8 @@ const calculateGrowthRate = (data: any[], key: string): number => {
   
   // Calculate total for the most recent half of the period
   const midpoint = Math.floor(data.length / 2);
-  const recentTotal = data.slice(midpoint).reduce((sum, day) => sum + (Number(day[key]) || 0), 0);
-  const previousTotal = data.slice(0, midpoint).reduce((sum, day) => sum + (Number(day[key]) || 0), 0);
+  const recentTotal = data.slice(midpoint).reduce((sum, day) => sum + Number(day[key] || 0), 0);
+  const previousTotal = data.slice(0, midpoint).reduce((sum, day) => sum + Number(day[key] || 0), 0);
   
   if (previousTotal === 0) return 0;
   
