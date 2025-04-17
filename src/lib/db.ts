@@ -754,5 +754,6 @@ const calculateGrowthRate = (data: any[], key: string): number => {
   
   if (previousTotal === 0) return 0;
   
-  return ((recentTotal - previousTotal) / previousTotal) * 100;
+  // Convert to numbers explicitly before arithmetic operation
+  return ((Number(recentTotal) - Number(previousTotal)) / Number(previousTotal)) * 100;
 };
