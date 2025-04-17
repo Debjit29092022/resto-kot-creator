@@ -1,3 +1,4 @@
+
 import { useEffect } from "react";
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
@@ -14,7 +15,7 @@ import Kitchen from "./pages/Kitchen";
 import Profile from "./pages/Profile";
 import Settings from "./pages/Settings";
 import NotFound from "./pages/NotFound";
-import { initDB } from "./lib/db";
+import { initDB, initSQLiteDB } from "./lib/db";
 
 const queryClient = new QueryClient();
 
@@ -24,7 +25,8 @@ const App = () => {
     const initialize = async () => {
       try {
         await initDB();
-        console.log("Database initialized successfully");
+        await initSQLiteDB();
+        console.log("Databases initialized successfully");
       } catch (error) {
         console.error("Error initializing database:", error);
       }

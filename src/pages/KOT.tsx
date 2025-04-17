@@ -4,7 +4,6 @@ import { useParams, useNavigate } from "react-router-dom";
 import { 
   Card, 
   CardContent, 
-  CardFooter, 
   CardHeader, 
   CardTitle 
 } from "@/components/ui/card";
@@ -32,6 +31,9 @@ const KOT = () => {
             toast.error("Order not found");
             navigate("/orders");
           }
+        } else {
+          toast.error("No order ID provided");
+          navigate("/orders");
         }
 
         const profileData = await getItem<Profile>(STORES.PROFILE, "main");
@@ -69,9 +71,9 @@ const KOT = () => {
       // Use the Printer API if available
       try {
         // @ts-ignore - Printer API is not fully typed in TypeScript yet
-        const availablePrinters = await navigator.printer.getPrinters();
+        const availablePrinters = await navigator.printer?.getPrinters();
         
-        if (availablePrinters.length === 0) {
+        if (!availablePrinters || availablePrinters.length === 0) {
           // No thermal printer found, use standard printing
           window.print();
         } else {

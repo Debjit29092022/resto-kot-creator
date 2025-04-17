@@ -53,3 +53,39 @@ export interface Settings {
   receiptHeader?: string;
   receiptFooter?: string;
 }
+
+export interface SalesData {
+  id?: number;
+  date: string;
+  month: number;
+  year: number;
+  totalSales: number;
+  totalOrders: number;
+  mostSoldItem?: string;
+  mostSoldQuantity?: number;
+}
+
+export interface Analytics {
+  totalSales: number;
+  totalOrders: number;
+  averageOrderValue: number;
+  topSellingItems: Array<{
+    name: string;
+    quantity: number;
+    revenue: number;
+  }>;
+  salesByDay: Array<{
+    date: string;
+    sales: number;
+    orders: number;
+  }>;
+  salesByCategory: Array<{
+    category: string;
+    amount: number;
+  }>;
+  growth: {
+    sales: number;
+    orders: number;
+    average: number;
+  };
+}
