@@ -9,7 +9,7 @@ export const getSalesAnalytics = async (): Promise<any> => {
     const orders = await getAllItems(STORES.ORDERS);
     
     // Calculate metrics
-    const totalSales = orders.reduce((sum, order: any) => sum + order.total, 0);
+    const totalSales = orders.reduce((sum, order: any) => sum + Number(order.total), 0);
     const totalOrders = orders.length;
     const averageOrderValue = totalOrders > 0 ? totalSales / totalOrders : 0;
     
@@ -20,8 +20,8 @@ export const getSalesAnalytics = async (): Promise<any> => {
         if (!itemCounts[item.menuItemName]) {
           itemCounts[item.menuItemName] = { count: 0, total: 0 };
         }
-        itemCounts[item.menuItemName].count += item.quantity;
-        itemCounts[item.menuItemName].total += item.totalPrice;
+        itemCounts[item.menuItemName].count += Number(item.quantity);
+        itemCounts[item.menuItemName].total += Number(item.totalPrice);
       });
     });
     
@@ -58,7 +58,7 @@ export const getSalesAnalytics = async (): Promise<any> => {
       );
       
       if (dayIndex !== -1) {
-        last7Days[dayIndex].sales += order.total;
+        last7Days[dayIndex].sales += Number(order.total);
         last7Days[dayIndex].orders += 1;
       }
     });
@@ -88,7 +88,7 @@ export const getSalesAnalytics = async (): Promise<any> => {
         if (!categoryTotals[category]) {
           categoryTotals[category] = 0;
         }
-        categoryTotals[category] += item.totalPrice;
+        categoryTotals[category] += Number(item.totalPrice);
       });
     });
     
@@ -133,4 +133,3 @@ export const calculateGrowthRate = (data: any[], key: string): number => {
   
   return ((recentTotal - previousTotal) / previousTotal) * 100;
 };
-
