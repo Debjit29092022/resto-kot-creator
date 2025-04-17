@@ -1,3 +1,4 @@
+
 // Database Service with IndexedDB and SQLite support
 
 // Database configuration
@@ -15,8 +16,17 @@ export const STORES = {
   ANALYTICS: 'analytics',
 };
 
+// Adding type definition for WebSQL openDatabase
+interface WebSQLDatabase {
+  transaction(callback: (tx: any) => void, errorCallback?: (error: any) => void, successCallback?: () => void): void;
+}
+
+interface WindowWithWebSQL extends Window {
+  openDatabase?: (name: string, version: string, displayName: string, estimatedSize: number) => WebSQLDatabase;
+}
+
 // SQLite database instance
-let sqliteDB: any = null;
+let sqliteDB: WebSQLDatabase | null = null;
 
 // Initialize the IndexedDB database
 export const initDB = (): Promise<IDBDatabase> => {
@@ -79,9 +89,11 @@ export const initDB = (): Promise<IDBDatabase> => {
 // Initialize SQLite database
 export const initSQLiteDB = async (): Promise<void> => {
   try {
-    // Check if SQLite is available
-    if (typeof window.openDatabase === 'function') {
-      sqliteDB = window.openDatabase(
+    // Check if SQLite is available (WebSQL)
+    const windowWithSQL = window as WindowWithWebSQL;
+    
+    if (typeof windowWithSQL.openDatabase === 'function') {
+      sqliteDB = windowWithSQL.openDatabase(
         SQLITE_DB_NAME,
         '1.0',
         'Legendary Baos & Wings Restaurant Database',
@@ -721,7 +733,8 @@ export const getSalesAnalytics = async (): Promise<any> => {
       growth: {
         sales: calculateGrowthRate(salesByDay, 'sales'),
         orders: calculateGrowthRate(salesByDay, 'orders'),
-        average: ((averageOrderValue / (totalSales - averageOrderValue)) * 100) || 0
+        average: averageOrderValue > 0 ? 
+          ((averageOrderValue / (totalSales - averageOrderValue || 1)) * 100) : 0
       }
     };
   } catch (error) {
@@ -736,8 +749,8 @@ const calculateGrowthRate = (data: any[], key: string): number => {
   
   // Calculate total for the most recent half of the period
   const midpoint = Math.floor(data.length / 2);
-  const recentTotal = data.slice(midpoint).reduce((sum, day) => sum + day[key], 0);
-  const previousTotal = data.slice(0, midpoint).reduce((sum, day) => sum + day[key], 0);
+  const recentTotal = data.slice(midpoint).reduce((sum, day) => sum + (day[key] || 0), 0);
+  const previousTotal = data.slice(0, midpoint).reduce((sum, day) => sum + (day[key] || 0), 0);
   
   if (previousTotal === 0) return 0;
   

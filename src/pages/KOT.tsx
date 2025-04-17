@@ -60,34 +60,10 @@ const KOT = () => {
         setOrder(updatedOrder);
       }
 
-      // Get access to the available printers
-      if (!("printer" in navigator)) {
-        // Use alternative print method for browsers without the Printer API
-        window.print();
-        toast.success("KOT sent to printer");
-        return;
-      }
-
-      // Use the Printer API if available
-      try {
-        // @ts-ignore - Printer API is not fully typed in TypeScript yet
-        const availablePrinters = await navigator.printer?.getPrinters();
-        
-        if (!availablePrinters || availablePrinters.length === 0) {
-          // No thermal printer found, use standard printing
-          window.print();
-        } else {
-          // TODO: Ideally, select the thermal printer for KOT
-          window.print();
-        }
-        
-        toast.success("KOT sent to printer");
-      } catch (printError) {
-        console.error("Printer API error:", printError);
-        // Fallback to standard print
-        window.print();
-        toast.success("KOT sent to printer");
-      }
+      // Use standard printing functionality
+      window.print();
+      toast.success("KOT sent to printer");
+      
     } catch (error) {
       console.error("Error printing KOT:", error);
       toast.error("Failed to print KOT");
