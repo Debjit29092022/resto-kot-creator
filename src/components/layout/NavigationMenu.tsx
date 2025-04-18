@@ -13,12 +13,15 @@ import {
   BarChart3,
   CreditCard,
   Clock,
-  Store
+  Store,
+  FileText,
+  Utensils
 } from "lucide-react";
 import { getItem } from "@/lib/db";
 import { STORES } from "@/lib/db";
 import { Profile } from "@/types";
 import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
 
 const navItems = [
   {
@@ -58,6 +61,24 @@ const navItems = [
   },
 ];
 
+const quickActions = [
+  {
+    title: "New Order",
+    href: "/new-order",
+    icon: <CreditCard className="h-5 w-5" />,
+  },
+  {
+    title: "Sales Report",
+    href: "/dashboard", 
+    icon: <BarChart3 className="h-5 w-5" />,
+  },
+  {
+    title: "Recent Orders",
+    href: "/orders",
+    icon: <Clock className="h-5 w-5" />,
+  },
+];
+
 const NavigationMenu = () => {
   const { pathname } = useLocation();
   const [restaurantName, setRestaurantName] = useState("Legendary Baos & Wings");
@@ -77,76 +98,96 @@ const NavigationMenu = () => {
     loadProfile();
   }, []);
 
+  // Animation variants
+  const containerVariants = {
+    hidden: { opacity: 0 },
+    visible: { 
+      opacity: 1,
+      transition: { 
+        staggerChildren: 0.08
+      }
+    }
+  };
+  
+  const itemVariants = {
+    hidden: { x: -20, opacity: 0 },
+    visible: { x: 0, opacity: 1 }
+  };
+
   return (
-    <div className="h-full flex flex-col bg-gradient-to-b from-primary-900 to-primary-950 text-white">
+    <div className="h-full flex flex-col bg-gradient-to-b from-primary-900 to-primary-950 text-white overflow-hidden">
       <div className="p-4 flex justify-center items-center border-b border-primary-800">
-        <div className="flex flex-col items-center">
+        <motion.div 
+          className="flex flex-col items-center"
+          initial={{ y: -20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ duration: 0.5 }}
+        >
           <img 
-            src="lovable-uploads/1da52370-ca5d-4160-bf46-ed3e4876b96c.png" 
+            src="/lovable-uploads/1da52370-ca5d-4160-bf46-ed3e4876b96c.png" 
             alt="Restaurant Logo" 
-            className="h-16 w-auto mb-2"
+            className="h-16 w-auto mb-2 hover:scale-105 transition-transform"
           />
           <h1 className="text-lg font-semibold text-center">{restaurantName}</h1>
-        </div>
+        </motion.div>
       </div>
       
       <div className="flex-1 overflow-y-auto py-4">
-        <div className="px-3 space-y-1">
+        <motion.div 
+          className="px-3 space-y-1"
+          variants={containerVariants}
+          initial="hidden"
+          animate="visible"
+        >
           {navItems.map((item) => (
-            <Button
-              key={item.href}
-              variant="ghost"
-              className={cn(
-                "w-full justify-start text-white/70 hover:text-white hover:bg-primary-800",
-                pathname === item.href && "bg-primary-800 text-white"
-              )}
-              asChild
-            >
-              <Link to={item.href}>
-                {item.icon}
-                <span className="ml-2">{item.title}</span>
-              </Link>
-            </Button>
+            <motion.div key={item.href} variants={itemVariants}>
+              <Button
+                variant="ghost"
+                className={cn(
+                  "w-full justify-start text-white/70 hover:text-white hover:bg-primary-800 transition-all",
+                  pathname === item.href && "bg-primary-800 text-white"
+                )}
+                asChild
+              >
+                <Link to={item.href}>
+                  {item.icon}
+                  <span className="ml-2">{item.title}</span>
+                </Link>
+              </Button>
+            </motion.div>
           ))}
-        </div>
+        </motion.div>
 
-        <div className="mt-6 px-3">
+        <motion.div 
+          className="mt-6 px-3"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
           <h2 className="px-4 text-xs font-semibold text-white/50 uppercase tracking-wider mb-2">
             Quick Access
           </h2>
-          <div className="space-y-1">
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-white/70 hover:text-white hover:bg-primary-800"
-              asChild
-            >
-              <Link to="/new-order">
-                <CreditCard className="h-5 w-5" />
-                <span className="ml-2">New Order</span>
-              </Link>
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-white/70 hover:text-white hover:bg-primary-800"
-              asChild
-            >
-              <Link to="/dashboard">
-                <BarChart3 className="h-5 w-5" />
-                <span className="ml-2">Sales Report</span>
-              </Link>
-            </Button>
-            <Button
-              variant="ghost"
-              className="w-full justify-start text-white/70 hover:text-white hover:bg-primary-800"
-              asChild
-            >
-              <Link to="/orders">
-                <Clock className="h-5 w-5" />
-                <span className="ml-2">Recent Orders</span>
-              </Link>
-            </Button>
-          </div>
-        </div>
+          <motion.div className="space-y-1" variants={containerVariants}>
+            {quickActions.map((action, index) => (
+              <motion.div 
+                key={action.href} 
+                variants={itemVariants}
+                transition={{ delay: 0.6 + index * 0.1 }}
+              >
+                <Button
+                  variant="ghost"
+                  className="w-full justify-start text-white/70 hover:text-white hover:bg-primary-800 transition-all"
+                  asChild
+                >
+                  <Link to={action.href}>
+                    {action.icon}
+                    <span className="ml-2">{action.title}</span>
+                  </Link>
+                </Button>
+              </motion.div>
+            ))}
+          </motion.div>
+        </motion.div>
       </div>
       
       <div className="p-4 border-t border-primary-800 bg-primary-900/50">
@@ -154,7 +195,7 @@ const NavigationMenu = () => {
           <Store className="h-5 w-5 text-primary-300" />
           <div className="ml-2">
             <p className="text-sm font-medium">Restaurant Manager</p>
-            <p className="text-xs text-white/50">v1.2.0</p>
+            <p className="text-xs text-white/50">v1.3.0</p>
           </div>
         </div>
       </div>

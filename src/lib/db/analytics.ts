@@ -11,7 +11,7 @@ export const getSalesAnalytics = async (): Promise<any> => {
     // Calculate metrics
     const totalSales = orders.reduce((sum, order: any) => sum + Number(order.total), 0);
     const totalOrders = orders.length;
-    const averageOrderValue = totalOrders > 0 ? totalSales / totalOrders : 0;
+    const averageOrderValue = totalOrders > 0 ? Number(totalSales) / Number(totalOrders) : 0;
     
     // Get top-selling items
     const itemCounts: Record<string, { count: number, total: number }> = {};

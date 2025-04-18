@@ -9,7 +9,8 @@ import {
   X, 
   Plus,
   Calendar,
-  User
+  User,
+  Utensils
 } from "lucide-react";
 import { getItem } from "@/lib/db";
 import { STORES } from "@/lib/db";
@@ -133,7 +134,7 @@ const Header = ({ toggleSidebar }: HeaderProps) => {
               </div>
               <div className="flex items-start p-3 hover:bg-secondary">
                 <div className="rounded-full bg-orange-500/10 p-2 mr-3">
-                  <ChefHat className="h-4 w-4 text-orange-500" />
+                  <Utensils className="h-4 w-4 text-orange-500" />
                 </div>
                 <div>
                   <p className="text-sm font-medium">Kitchen update</p>
