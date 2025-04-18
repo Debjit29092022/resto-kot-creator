@@ -1,6 +1,7 @@
 
 import { STORES } from './constants';
 import { getAllItems } from './indexedDB';
+import { Order, OrderItem } from '@/types';
 
 // Fetch analytics data
 export const getSalesAnalytics = async (): Promise<any> => {
@@ -9,14 +10,14 @@ export const getSalesAnalytics = async (): Promise<any> => {
     const orders = await getAllItems(STORES.ORDERS);
     
     // Calculate metrics
-    const totalSales = orders.reduce((sum, order: any) => sum + Number(order.total), 0);
+    const totalSales = orders.reduce((sum, order: Order) => sum + Number(order.total), 0);
     const totalOrders = orders.length;
     const averageOrderValue = totalOrders > 0 ? Number(totalSales) / Number(totalOrders) : 0;
     
     // Get top-selling items
     const itemCounts: Record<string, { count: number, total: number }> = {};
-    orders.forEach((order: any) => {
-      order.items.forEach((item: any) => {
+    orders.forEach((order: Order) => {
+      order.items.forEach((item: OrderItem) => {
         if (!itemCounts[item.menuItemName]) {
           itemCounts[item.menuItemName] = { count: 0, total: 0 };
         }
@@ -48,7 +49,7 @@ export const getSalesAnalytics = async (): Promise<any> => {
     });
     
     // Fill data for the last 7 days
-    orders.forEach((order: any) => {
+    orders.forEach((order: Order) => {
       const orderDate = new Date(order.timestamp);
       // Check if order is from the last 7 days
       const dayIndex = last7Days.findIndex(day => 
@@ -71,8 +72,8 @@ export const getSalesAnalytics = async (): Promise<any> => {
     
     // Calculate sales by category
     const categoryTotals: Record<string, number> = {};
-    orders.forEach((order: any) => {
-      order.items.forEach((item: any) => {
+    orders.forEach((order: Order) => {
+      order.items.forEach((item: OrderItem) => {
         // Determine the category based on the item name (simplified approach)
         let category = "Other";
         if (item.menuItemName.includes("WINGS")) {

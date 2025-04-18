@@ -17,6 +17,7 @@ export interface OrderItem {
   menuItemName: string;
   quantity: number;
   size?: string;
+  price: number; // Added missing property
   unitPrice: number;
   totalPrice: number;
   notes?: string;
@@ -33,6 +34,9 @@ export interface Order {
   timestamp: Date;
   status: 'pending' | 'processing' | 'completed' | 'cancelled';
   waiterName?: string;
+  taxPercentage?: number; // Added missing property
+  orderType?: string; // Added missing property
+  discount?: number; // Added missing property
 }
 
 export interface Profile {

@@ -15,7 +15,7 @@ interface KOTContentProps {
 }
 
 export const KOTContent = ({ order, profile, printRef }: KOTContentProps) => {
-  const qrValue = "upi://pay?pa=yourupi@bank&pn=RestaurantName&am=" + order.total;
+  const qrValue = `upi://pay?pa=yourupi@bank&pn=RestaurantName&am=${order.total}`;
   const qrRef = useRef<HTMLDivElement>(null);
 
   const handlePrint = useReactToPrint({
@@ -112,7 +112,7 @@ export const KOTContent = ({ order, profile, printRef }: KOTContentProps) => {
                     </td>
                     <td className="py-2 text-center">{item.quantity}</td>
                     <td className="py-2 text-right">
-                      {formatCurrency(Number(item.price))}
+                      {formatCurrency(Number(item.price || item.unitPrice))}
                     </td>
                     <td className="py-2 text-right">
                       {formatCurrency(Number(item.totalPrice))}
@@ -136,7 +136,7 @@ export const KOTContent = ({ order, profile, printRef }: KOTContentProps) => {
               <span>SGST ({halfTaxPercentage}%):</span>
               <span>{formatCurrency(halfTaxAmount)}</span>
             </div>
-            {order.discount > 0 && (
+            {order.discount && order.discount > 0 && (
               <div className="flex justify-between mb-1">
                 <span>Discount:</span>
                 <span>-{formatCurrency(Number(order.discount))}</span>
